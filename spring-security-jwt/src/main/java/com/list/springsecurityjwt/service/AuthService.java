@@ -74,7 +74,6 @@ public class AuthService {
         return true;
     }
 
-
     public Member inquire(Long memberId) {
         LOGGER.info("[AuthService] inquire 시작");
         Boolean aBoolean = memberRepository.existsById(memberId);
@@ -86,5 +85,26 @@ public class AuthService {
         LOGGER.info("[AuthService] inquire 종료: member.getName() = {}", member.getName());
         LOGGER.info("[AuthService] inquire 종료: member.getAuthorities() = {}", member.getAuthorities());
         return member;
+    }
+
+    public Member updatePassword(Long uid, UpdatePasswordRequestDto updatePasswordRequestDto) {
+        Member member = memberRepository.findById(uid)
+                .orElseThrow(
+                        () -> new CustomException(HttpStatus.UNAUTHORIZED, "일치하는 유저가 없습니다."));
+        LOGGER.info("[AuthService] updatePasswordRequestDto.getRawPassword() = {}", updatePasswordRequestDto.getRawPassword());
+        LOGGER.info("[AuthService] member.getPassword() = {}", member.getPassword());
+        if (!passwordEncoder.matches(updatePasswordRequestDto.getRawPassword(), member.getPassword())) {
+            throw new CustomException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+        }
+
+        String encodePassword = passwordEncoder.encode(updatePasswordRequestDto.getNewPassword());
+        member.setPassword(encodePassword);
+        LOGGER.info("[AuthService] updatePasswordRequestDto.getNewPassword() = {}", updatePasswordRequestDto.getNewPassword());
+        LOGGER.info("[AuthService] passwordEncoder.encode(updatePasswordRequestDto.getNewPassword() = {}", encodePassword);
+
+        Member result = memberRepository.save(member);
+        LOGGER.info("[AuthService] result.getPassword() = {}", result.getPassword());
+
+        return result;
     }
 }

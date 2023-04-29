@@ -60,9 +60,18 @@ public class MemberDto {
     @Setter
     @AllArgsConstructor
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    public static class InquireResponseDto {
+    public static class MemberResponseDto {
         private Boolean success;
         private String name;
+    }
+
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdatePasswordRequestDto {
+        private String rawPassword;
+        private String newPassword;
     }
 
     @Getter

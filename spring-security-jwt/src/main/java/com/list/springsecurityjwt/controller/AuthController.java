@@ -43,15 +43,15 @@ public class AuthController {
     }
 
     @GetMapping("/inquire/{memberId}")
-    public InquireResponseDto inquire(@PathVariable @Valid Long memberId) {
+    public MemberResponseDto inquire(@PathVariable @Valid Long memberId) {
         System.out.println("memberId = " + memberId);
         System.out.println("inquire [memberId] 대상으로 실행");
-        return new InquireResponseDto(true, authService.inquire(memberId).getName());
+        return new MemberResponseDto(true, authService.inquire(memberId).getName());
     }
 
 
     @GetMapping("/inquire/me")
-    public InquireResponseDto inquireMe(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
+    public MemberResponseDto inquireMe(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
         LOGGER.info("[AuthController] inquireMe 시작");
         LOGGER.info("[AuthController] userInfoPrincipal.getUsername() = {}", memberPrincipal.getUsername());
         LOGGER.info("[AuthController] userInfoPrincipal.getMember() = {}", memberPrincipal.getMember());
@@ -60,16 +60,24 @@ public class AuthController {
         System.out.println("inquire [본인] 대상으로 실행");
         Member authMember = authService.inquire(memberPrincipal.getMember().getId());
         UserDetails userDetails = userDetailsService.loadUserByUsername(memberPrincipal.getMember().getUsername());
-        return new InquireResponseDto(true, userDetails.getUsername());
+        return new MemberResponseDto(true, userDetails.getUsername());
     }
 
     @GetMapping("/test/non")
     public TestResponseDto testAuthNon(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
         return new TestResponseDto(true, memberPrincipal.getMember().getName());
     }
+
     @GetMapping("/test/user")
     @Secured("ROLE_USER")
     public TestResponseDto testAuthUser(@AuthenticationPrincipal MemberPrincipal memberPrincipal) {
         return new TestResponseDto(true, memberPrincipal.getMember().getName());
+    }
+
+    @PutMapping("/password")
+    public MemberResponseDto updatePassword(@AuthenticationPrincipal MemberPrincipal memberPrincipal,@RequestBody UpdatePasswordRequestDto updatePasswordRequestDto) {
+        LOGGER.info("[AuthController] userInfoPrincipal.getMember().getId() = {}", memberPrincipal.getMember().getId());
+        Member member = authService.updatePassword(memberPrincipal.getMember().getId(), updatePasswordRequestDto);
+        return new MemberResponseDto(true, member.getName());
     }
 }
