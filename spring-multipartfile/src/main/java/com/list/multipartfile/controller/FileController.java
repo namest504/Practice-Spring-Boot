@@ -13,6 +13,7 @@ import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/file")
 public class FileController {
 
     private final FileService fileService;
@@ -22,14 +23,14 @@ public class FileController {
         return "test-success";
     }
 
-    @PostMapping("/file/upload")
+    @PostMapping("/upload")
     public ResponseEntity<?> uploadImageToFileSystem(@RequestParam("image") MultipartFile file, HttpServletRequest req) throws IOException {
         String uploadImage = fileService.uploadImageToFileSystem(file, req);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
 
-    @GetMapping("/file/download/{fileName}")
+    @GetMapping("/{fileName}")
     public ResponseEntity<?> downloadImageToFileSystem(@PathVariable("fileName") String fileName) throws IOException {
         byte[] downloadImage = fileService.downloadImageFromFileSystem(fileName);
         return ResponseEntity.status(HttpStatus.OK)
