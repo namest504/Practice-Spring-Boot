@@ -19,9 +19,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // CSRF 설정 Disable
         http.httpBasic().disable()
-                
+                .csrf().disable()
+
                 .authorizeRequests()
-                .antMatchers("/hello").permitAll()
+                .antMatchers("/", "/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
