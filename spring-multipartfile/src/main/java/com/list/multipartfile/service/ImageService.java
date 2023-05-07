@@ -34,8 +34,8 @@ public class ImageService {
     }
 
     // 이미지 파일로 압축하기
-    public byte[] downloadImage(String fileName) {
-        ImageData imageData = imageRepository.findByName(fileName)
+    public byte[] downloadImage(Long fileId) {
+        ImageData imageData = imageRepository.findById(fileId)
                 .orElseThrow(RuntimeException::new);
 
         log.info("download imageData: {}", imageData);

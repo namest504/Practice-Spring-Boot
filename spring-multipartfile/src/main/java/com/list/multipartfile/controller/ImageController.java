@@ -27,8 +27,8 @@ public class ImageController {
 
     // 다운로드
     @GetMapping("/{fileName}")
-    public ResponseEntity<?> downloadImage(@PathVariable("fileName") String fileName) {
-        byte[] downloadImage = imageService.downloadImage(fileName);
+    public ResponseEntity<?> downloadImage(@PathVariable("fileName") Long fileId) {
+        byte[] downloadImage = imageService.downloadImage(fileId);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(downloadImage);
