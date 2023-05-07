@@ -1,5 +1,6 @@
-package com.list.springstomp;
+package com.list.springstomp.controller;
 
+import com.list.springstomp.entity.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -14,8 +15,11 @@ public class MessageController {
     @MessageMapping("/chat/message")
     public void enter(ChatMessage message) {
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
-            message.setMessage(message.getSender()+"님이 입장하였습니다.");
+            message.setMessage(message.getSender() + "님이 입장하였습니다.");
         }
-        sendingOperations.convertAndSend("/topic/chat/room/"+message.getRoomId(),message);
+        if (ChatMessage.MessageType.EXIT.equals(message.getType())) {
+            message.setMessage(message.getSender() + "님이 퇴장하였습니다.");
+        }
+        sendingOperations.convertAndSend("/topic/chat/room/" + message.getRoomId(), message);
     }
 }
