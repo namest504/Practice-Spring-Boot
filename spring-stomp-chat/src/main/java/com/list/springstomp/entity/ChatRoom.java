@@ -1,4 +1,4 @@
-package com.list.springstomp;
+package com.list.springstomp.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
