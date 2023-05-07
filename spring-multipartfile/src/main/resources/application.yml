@@ -21,3 +21,7 @@ spring:
     multipart:
       maxFileSize: 10MB
       maxRequestSize: 10MB
+
+# 파일 저장 할 실제 디렉토리 경로 지정
+img:
+  dir: "/Users/"
