@@ -1,4 +1,4 @@
-package com.list.springstomp;
+package com.list.springstomp.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ChatMessage {
     public enum MessageType {
-        ENTER, TALK
+        ENTER, TALK, EXIT
     }
 
     private MessageType type;
