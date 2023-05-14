@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.transaction.Transactional;
+import java.time.Duration;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -105,5 +106,29 @@ public class RedisTemplateTest {
 
         Object hash3 = redisTemplate.opsForHash().get(key, "3HashKey");
         assertThat(hash3).isEqualTo("3rdHash");
+    }
+
+    @Test
+    @DisplayName("expire test")
+    public void expireTest() throws InterruptedException {
+
+        String key = "expire";
+
+        redisTemplate.opsForHash().put(key, "1ExpireKey", "1stExpire");
+        redisTemplate.opsForHash().put(key, "2ExpireKey", "2ndExpire");
+        redisTemplate.opsForHash().put(key, "3ExpireKey", "3rdExpire");
+        redisTemplate.opsForHash().put(key, "4ExpireKey", "4thExpire");
+
+        //3초 후에 key 가 만료되도록 설정
+        redisTemplate.expire(key, Duration.ofSeconds(3));
+
+        Object beforeExpired = redisTemplate.opsForHash().get(key, "2ExpireKey");
+        assertThat(beforeExpired).isEqualTo("2ndExpire");
+
+        //3초간 SLEEP
+        Thread.sleep(3000);
+
+        Object afterExpired = redisTemplate.opsForHash().get(key, "2ExpireKey");
+        assertThat(afterExpired).isNotEqualTo("2ndExpire");
     }
 }
