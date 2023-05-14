@@ -23,12 +23,6 @@ public class RedisTemplateTest {
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
-//    @AfterEach
-//    void after() {
-//
-//        redisTemplate.delete(key);
-//    }
-
     @Test
     @DisplayName("opsForValue test")
     public void valueTest() {
@@ -40,6 +34,8 @@ public class RedisTemplateTest {
         String setKey = redisTemplate.opsForValue().get(key);
 
         assertThat(setKey).isEqualTo("setValue");
+
+        redisTemplate.delete(key);
     }
 
     @Test
@@ -70,6 +66,8 @@ public class RedisTemplateTest {
 
         List<String> range = redisTemplate.opsForList().range(key, 0, size);
         Assertions.assertThat(range).isEmpty();
+
+        redisTemplate.delete(key);
     }
 
 
@@ -86,6 +84,8 @@ public class RedisTemplateTest {
         List<String> pop = redisTemplate.opsForSet().pop(key, size);
 
         assertThat(pop).containsExactly("1stSet", "2ndSet");
+
+        redisTemplate.delete(key);
     }
 
     @Test
@@ -106,6 +106,8 @@ public class RedisTemplateTest {
 
         Object hash3 = redisTemplate.opsForHash().get(key, "3HashKey");
         assertThat(hash3).isEqualTo("3rdHash");
+
+        redisTemplate.delete(key);
     }
 
     @Test
@@ -130,5 +132,7 @@ public class RedisTemplateTest {
 
         Object afterExpired = redisTemplate.opsForHash().get(key, "2ExpireKey");
         assertThat(afterExpired).isNotEqualTo("2ndExpire");
+
+        redisTemplate.delete(key);
     }
 }
