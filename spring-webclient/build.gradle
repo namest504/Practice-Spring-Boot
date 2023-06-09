@@ -15,10 +15,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-<<<<<<< HEAD
-=======
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
->>>>>>> origin/main
 }
 
 tasks.named('test') {
